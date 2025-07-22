@@ -1,8 +1,8 @@
-import asyncio
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.prebuilt import create_react_agent
 from models.ollama_model import OllamaLLM
 from models.bedrock_model import BedrockLLM
+import traceback
 
 # class MCPClient:
 #     def __init__(self, llm_model, llm_provider):
@@ -12,7 +12,9 @@ from models.bedrock_model import BedrockLLM
 
 async def agents(llm_model, llm_provider, question):
     try:
-        print(f"Setting up MCP Client with model: {llm_model} and provider: {llm_provider}")
+        print(
+            f"Setting up MCP Client with model: {llm_model} and provider: {llm_provider}"
+        )
         if llm_provider == "aws":
             model = BedrockLLM(llm_model).get_llm()
         elif llm_provider == "ollama":
@@ -22,7 +24,9 @@ async def agents(llm_model, llm_provider, question):
     except Exception as e:
         raise RuntimeError(f"Failed to initialize LLM: {e}")
 
-    print(f"LLM Model: {model['llm_model']} from {model['llm_provider']} is initialized successfully.")
+    print(
+        f"LLM Model: {model['llm_model']} from {model['llm_provider']} is initialized successfully."
+    )
 
     client = MultiServerMCPClient(
         {
@@ -31,19 +35,27 @@ async def agents(llm_model, llm_provider, question):
                 "args": ["tools/math_tool.py"],
                 "transport": "stdio",
             },
-            "weather": {
-                "transport": "streamable_http",
-                "url": "http://localhost:8000/mcp",
-            },
+            # "weather": {
+            #     "url": "https://api.weatherapi.com/v1/current.json",  # Ensure server is running here
+            #     "transport": "streamable_http",
+            # }
         }
     )
-    tools = await client.get_tools()
+    print("Connecting to MCP tools and agents")
+
+    try:
+        tools = await client.get_tools()
+    except* Exception as eg:
+        print("ExceptionGroup caught during tool loading:")
+        traceback.print_exception(eg)
+        raise RuntimeError(f"Failed to load tools: {eg}")
+
     print(f"Loaded Tools: {[tool.name for tool in tools]}")
-    agent = create_react_agent(model=model["llm_model"], tools=tools, verbose=True)
+    agent = create_react_agent(model=model["llm_model"], tools=tools)
 
-    response = await agent.ainvoke({"message": {"role": "user", "content": question}})
-    print(f"Agent Response: {response['message'][-1]['content']}")
-    return response['message'][-1]['content']
-
-
-
+    response = await agent.ainvoke(
+        {"messages": [{"role": "user", "content": question}]}
+    )
+    print(f"Response: {response}")
+    print(f"Agent Response: {response['messages'][-1].content}")
+    return response["messages"][-1].content
