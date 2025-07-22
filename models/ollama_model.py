@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_ollama import OllamaEmbeddings
+from langchain_ollama import ChatOllama
 
 
 class OllamaLLM:
@@ -14,8 +15,16 @@ class OllamaLLM:
             if not self._model:
                 raise ValueError("LLM_MODEL environment variable is not set.")
 
-            print(f"Using Ollama embedding model: {self._model}")
-            return {"llm_provider": "ollama", "llm_model": self._model}
+            return {
+                "llm_provider": "ollama",
+                "llm_model": ChatOllama(
+                    model=self._model,
+                    temperature=0.1,
+                    num_predict=256,
+                    timeout=10,
+                    # other params ...
+                ),
+            }
 
         except Exception as e:
             raise RuntimeError(f"Failed to initialize Ollama Embedding model: {e}")

@@ -1,6 +1,6 @@
 import os
 import boto3
-from langchain_aws import BedrockLLM as LangchainBedrock
+from langchain_aws import ChatBedrockConverse
 from dotenv import load_dotenv
 
 
@@ -28,14 +28,13 @@ class BedrockLLM:
                 region_name=self._region,
             )
 
-            print("Bedrock model is selected.")
-            print(f"Using Bedrock model: {self._model}")
             return {
                 "llm_provider": "aws",
-                "llm_model": LangchainBedrock(
+                "llm_model": ChatBedrockConverse(
                     model_id=self._model,
                     client=bedrock_client,
-                    temperature=0,
+                    temperature=0.1,
+                    timeout=10,
                 ),
             }
 
