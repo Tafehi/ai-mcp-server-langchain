@@ -11,7 +11,7 @@ This repository showcases how to build a modular, scalable, and intelligent LLM-
  - MCP for distributed tool routing
  - Streamlit for a clean and interactive frontend
 It demonstrates how to integrate multiple LLMs and tools into a cohesive solution.
-
+By using [MCP inspector](https://modelcontextprotocol.io/docs/tools/inspector) you track the number of added tools, resources and prompts in MCP server and also `MCP inspector` makes the debugging easy.
 ---
 
 ## 🧱 Project Structure
