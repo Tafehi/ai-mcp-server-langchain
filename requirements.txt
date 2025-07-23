@@ -2,6 +2,7 @@ mcp[cli]
 FastAPI
 python-dotenv
 ipykernel
+PyPDF2
 httpx
 altair==5.5.0
 annotated-types==0.7.0

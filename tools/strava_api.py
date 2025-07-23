@@ -23,7 +23,15 @@ mcp = FastMCP(name="strava", host="localhost", port=8001)
 @mcp.tool()
 async def get_strava_activities(per_page: int = 10) -> list:
     """
-    Fetch recent activities from Strava using the API.
+    Fetch recent activities from Strava using the API. 
+    Args:
+        per_page (int): Number of activities to fetch per page. Default is 10.
+    Returns:
+        list: A list of activities with details like name, distance, and more. also give a brief summary of each activity.
+        highlight progress and any issues encountered.
+    Raises:
+        Exception: If the API request fails or returns "check the credentials and user id".
+
     """
     print(f"Strava Client ID: {strava_client_id}")
     print(f"Strava Client Secret: {strava_client_secret}")
