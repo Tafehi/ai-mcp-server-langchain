@@ -1,9 +1,9 @@
 from mcp.server.fastmcp import FastMCP
 from bs4 import BeautifulSoup
 import os
-import openai  # or use Azure OpenAI SDK
 
-mcp = FastMCP("HTML QA Server")
+
+mcp = FastMCP("rag_html")
 
 # Load and cache HTML content
 html_text = ""
@@ -17,21 +17,18 @@ for filename in os.listdir(html_dir):
             text = soup.get_text(separator="\n", strip=True)
             html_text += text + "\n"
 
-@mcp.tool
+@mcp.tool()
 def search_html(question: str) -> str:
     """Search HTML content for relevant context and answer the question."""
     keywords = question.lower().split()
     matches = [line for line in html_text.split('\n') if any(k in line.lower() for k in keywords)]
     context = "\n".join(matches[:10])  # limit context size
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": "Answer based on the provided HTML content."},
-            {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"}
-        ]
-    )
-    return response['choices'][0]['message']['content']
+    if not context:
+        return "No relevant content found in the HTML documents."
+
+    # Return the context directly or format it as an answer
+    return f"Relevant context found:\n{context}"
 
 if __name__ == "__main__":
     mcp.run(transport="stdio")

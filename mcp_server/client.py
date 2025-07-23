@@ -32,14 +32,19 @@ async def agents(llm_model, llm_provider, question):
                 "args": ["tools/math_tool.py"],
                 "transport": "stdio",
             },
+            "rag_html": {
+                "command": "python",
+                "args": ["tools/rag_tool.py"],
+                "transport": "stdio",
+            },
             "strava": {
                 "url": "http://localhost:8001/mcp/",
                 "transport": "streamable_http",
             },
-            "weather": {
-                "url": "http://localhost:8002/mcp/",
-                "transport": "streamable_http",
-            },
+        #     "weather": {
+        #         "url": "http://localhost:8002/mcp/",
+        #         "transport": "streamable_http",
+        #     },
         }
     )
     print("Connecting to MCP tools and agents")
