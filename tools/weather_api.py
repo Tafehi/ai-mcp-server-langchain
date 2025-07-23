@@ -13,7 +13,7 @@ import mcp
 from mcp.server.fastmcp import FastMCP
 
 
-mcp = FastMCP(name="weather", host="localhost", port=8000)
+mcp = FastMCP(name="weather")
 
 
 # class WeatherAPI:
@@ -23,9 +23,10 @@ mcp = FastMCP(name="weather", host="localhost", port=8000)
 #         self.city_name = city_name
 #         self.base_url = "https://api.weatherapi.com/v1/current.json"
 load_dotenv()
-base_url = "https://api.weatherapi.com/v1/current.json"
-api_key = os.getenv("WEATHER_API_KEY")
 
+url = os.getenv("WEATHER_URL")
+api_key = os.getenv("WEATHER_API_KEY")
+# city_name = "Oslo"  # Default city for testing
 
 @mcp.tool()
 def get_weather(city_name: str) -> dict:
@@ -34,8 +35,9 @@ def get_weather(city_name: str) -> dict:
     Returns a dictionary with city, temperature (C), and condition.
     """
     print(f"Server received weather request: {city_name}")
-    params = {"key": os.getenv("WEATHER_API_KEY"), "q": city_name, "aqi": "no"}
-    response = requests.get(base_url, params=params)
+    params = {"key": api_key, "q": city_name, "aqi": "no"}
+    print(f"Requesting weather data for {city_name} with params: {params}")
+    response = requests.get(url, params=params)
     if response.status_code == 200:
         data = response.json()
         return {
@@ -51,4 +53,8 @@ def get_weather(city_name: str) -> dict:
 
 if __name__ == "__main__":
     print("Running server with Streamable HTTP transport for weather API...")
-    mcp.run(transport="streamable-http")
+    mcp.run(transport="streamable-http", 
+            host="localhost", port=8000)  # Adjust host and port as needed
+    # print("Weather API server is up and running.")
+    # respond = get_weather(city_name)  # Test the function on server start
+    # print(f"Weather data for {city_name}: {respond}")

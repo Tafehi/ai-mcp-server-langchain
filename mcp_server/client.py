@@ -35,10 +35,10 @@ async def agents(llm_model, llm_provider, question):
                 "args": ["tools/math_tool.py"],
                 "transport": "stdio",
             },
-            # "weather": {
-            #     "url": "https://api.weatherapi.com/v1/current.json",  # Ensure server is running here
-            #     "transport": "streamable_http",
-            # }
+            "weather": {
+                "url": "http://localhost:8000/",
+                "transport": "streamable_http"
+            },
         }
     )
     print("Connecting to MCP tools and agents")
