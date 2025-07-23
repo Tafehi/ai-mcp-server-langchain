@@ -1,13 +1,10 @@
+# client.py
+
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.prebuilt import create_react_agent
 from models.ollama_model import OllamaLLM
 from models.bedrock_model import BedrockLLM
 import traceback
-
-# class MCPClient:
-#     def __init__(self, llm_model, llm_provider):
-#         self.llm_model = llm_model
-#         self.llm_provider = llm_provider
 
 
 async def agents(llm_model, llm_provider, question):
@@ -35,9 +32,13 @@ async def agents(llm_model, llm_provider, question):
                 "args": ["tools/math_tool.py"],
                 "transport": "stdio",
             },
+            "strava": {
+                "url": "http://localhost:8001/mcp/",
+                "transport": "streamable_http",
+            },
             "weather": {
-                "url": "http://localhost:8000/",
-                "transport": "streamable_http"
+                "url": "http://localhost:8002/mcp/",
+                "transport": "streamable_http",
             },
         }
     )

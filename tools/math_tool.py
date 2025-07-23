@@ -6,9 +6,7 @@ from mcp.server.fastmcp import FastMCP
 
 
 mcp = FastMCP(
-    name="math",
-    host="localhost",  # only used for SSE transport (localhost)
-    port=8000,  # only used for SSE transport (set this to any port)
+    name="math", # only used for SSE transport (set this to any port)
     # stateless_http=True,
 )
 
