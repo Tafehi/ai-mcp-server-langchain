@@ -1,43 +1,34 @@
-## Open-Meteo
-#
-# Free, open-source weather API.
-# No API key required.
-# Offers hourly forecasts, historical data, and more.
-#
-
+"""
+Open-Meteo Weather Tool Server
+Free, open-source weather API.
+"""
 
 import os
 import httpx
-import asyncio
 from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
-
-# class WeatherAPI:
-#     def __init__(self, city_name):
-#         load_dotenv()
-#         self.api_key = os.getenv("WEATHER_API_KEY")
-#         self.city_name = city_name
-#         self.base_url = "https://api.weatherapi.com/v1/current.json"
-
 
 # Load environment variables
 load_dotenv()
 url = os.getenv("WEATHER_URL")
 api_key = os.getenv("WEATHER_API_KEY")
 
+# Validate environment variables
+if not url or not api_key:
+    raise EnvironmentError("Missing WEATHER_URL or WEATHER_API_KEY in .env file")
+
 # Initialize MCP
 mcp = FastMCP(name="weather", host="localhost", port=8002)
-
 
 @mcp.tool()
 async def get_weather(city_name: str) -> dict:
     """
-    Fetch current weather for a given city uasing api call.
+    Fetch current weather for a given city using the API.
     Args:
         city_name (str): Name of the city to fetch weather for.
-    Returns a dictionary with city, temperature (C), country, latitude, longitude, wind_speed (kph) and condition.
+    Returns:
+        dict: Weather details including temperature, wind, country, city, latitude, and longitude and the last updated time.
     """
-     # Placeholder response
     print(f"Server received weather request: {city_name}")
     params = {"key": api_key, "q": city_name, "aqi": "no"}
     print(f"Requesting weather data for {city_name} with params: {params}")
@@ -59,13 +50,9 @@ async def get_weather(city_name: str) -> dict:
         }
     else:
         raise Exception(
-            f"API request failed: {response.status_code} - {response.json()}"
+            f"API request failed: {response.status_code} - {response.text}"
         )
 
-
 if __name__ == "__main__":
-    print("Running MCP server on http://localhost:8005")
-
-    # response = asyncio.run(get_weather("Oslo"))  # Example call to test the function
-    # print(f"Weather in {response['city']}, {response}:")
+    print("Running MCP server on http://localhost:8002/mcp/")
     mcp.run(transport="streamable-http")

@@ -3,6 +3,8 @@ FastAPI
 python-dotenv
 ipykernel
 PyPDF2
+stravalib
+fastmcp
 beautifulsoup4
 httpx
 altair==5.5.0

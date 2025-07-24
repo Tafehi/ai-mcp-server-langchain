@@ -4,7 +4,6 @@ https://www.strava.com/
 """
 
 import os
-import sys
 import httpx
 import asyncio
 from dotenv import load_dotenv
@@ -13,9 +12,9 @@ from mcp.server.fastmcp import FastMCP
 # Load environment variables
 load_dotenv()
 strava_client_id = os.getenv("STRAVA_CLIENT_ID")
-strava_client_secret = os.getenv("STRAVA_CLIENT_SECRET")
 strava_access_token = os.getenv("STRAVA_ACCESS_TOKEN")
 strava_endpoint = os.getenv("STRAVA_END_POINT")
+strava_detail_endpoint = os.getenv("STRAVA_DETAIL_ENDPOINT")
 
 # Initialize MCP
 mcp = FastMCP(name="strava", host="localhost", port=8001)
@@ -23,19 +22,18 @@ mcp = FastMCP(name="strava", host="localhost", port=8001)
 @mcp.tool()
 async def get_strava_activities(per_page: int = 10) -> list:
     """
-    Fetch recent activities from Strava using the API. 
+    Fetch recent activities from Strava using the API.
     Args:
         per_page (int): Number of activities to fetch per page. Default is 10.
     Returns:
-        list: A list of activities with details like name, distance, and more. also give a brief summary of each activity.
-        highlight progress and any issues encountered.
-    Raises:
-        Exception: If the API request fails or returns "check the credentials and user id".
-
+        list: A list of activities with details like name, distance, and more. tell me my strongest activity.
+        suggestions: "tell me my strongest activity", "what is my longest activity"
+        give me suggestion for other activities which I can do.
     """
-    print(f"Strava Client ID: {strava_client_id}")
-    print(f"Strava Client Secret: {strava_client_secret}")
-    print(f"Fetching up to {per_page} activities from Strava API...")
+
+    if not strava_client_id or not strava_access_token:
+        raise ValueError("Strava credentials are not set in environment variables.")
+
 
     headers = {
         "Authorization": f"Bearer {strava_access_token}"
@@ -49,26 +47,12 @@ async def get_strava_activities(per_page: int = 10) -> list:
         response = await client.get(strava_endpoint, headers=headers, params=params, timeout=10)
 
     if response.status_code == 200:
+        # print(f"response: {response.json()}")
         return response.json()
     else:
         raise Exception(f"Strava API request failed: {response.status_code} - {response.text}")
 
-# Optional: test the tool manually
-async def test_tool():
-    try:
-        activities = await get_strava_activities()
-        print("Response type:", type(activities))
-        print("Response content:", activities)
-
-        for activity in activities:
-            if isinstance(activity, dict):
-                print(f"{activity['name']} - {activity['distance']} meters")
-            else:
-                print("Unexpected activity format:", activity)
-    except Exception as e:
-        print("Error during test:", e)
-
 if __name__ == "__main__":
-    # asyncio.run(test_tool())
+    # asyncio.run(get_strava_activities())
     print("Starting Strava MCP server on http://localhost:8001/mcp/")
     mcp.run(transport="streamable-http")

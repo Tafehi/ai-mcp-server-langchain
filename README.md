@@ -12,6 +12,8 @@ This repository showcases how to build a modular, scalable, and intelligent LLM-
  - Streamlit for a clean and interactive frontend
 It demonstrates how to integrate multiple LLMs and tools into a cohesive solution.
 By using [MCP inspector](https://modelcontextprotocol.io/docs/tools/inspector) you track the number of added tools, resources and prompts in MCP server and also `MCP inspector` makes the debugging easy.
+An [screenshot of this AI powered] application can be seen in below (./pic/01.png)
+
 ---
 
 ## 🧱 Project Structure
@@ -61,17 +63,17 @@ By using [MCP inspector](https://modelcontextprotocol.io/docs/tools/inspector) y
 
 1. **Install dependencies using uv:**
 
-   ```bash
+```bash
    uv pip install -r requirements.txt
-   ```
+```
 Set up environment variables: 
   - Copy .env.example to .env:
-   ```bash
+```bash
    cp .env.example .env
-   ```
+```
 
   - Populate `.env` with your own configuration:
-   ```bash
+```bash
     ## AWS configuration
     AWS_ACCESS_KEY_ID=""
     AWS_SECRET_ACCESS_KEY=""
@@ -90,7 +92,7 @@ Set up environment variables:
     STRAVA_CLIENT_SECRET=""
     STRAVA_ACCESS_TOKEN=""
     STRAVA_END_POINT="https://www.strava.com/api/v3/athlete"
-   ```
+```
 
 ---
 ## 🧠 LLM Models
@@ -108,7 +110,7 @@ You can switch models dynamically via the Streamlit UI.
 
 ## 🧠 MCP Client Routing
 The MCP client in mcp_server/client.py uses the following configuration to route tasks:
-  ```bash
+```bash
     client = MultiServerMCPClient(
         {
             "math": {
@@ -131,7 +133,7 @@ The MCP client in mcp_server/client.py uses the following configuration to route
             },
         }
     )
-  ```
+```
 ---
 ## 🛠️ Tool Agents
 # 🧮 math_tool.py
@@ -146,7 +148,7 @@ The MCP client in mcp_server/client.py uses the following configuration to route
 # 🌦️ weather_api.py
   - Returns weather data for a given city:
 
-  ```bash
+```bash
         {
         "city": "Oslo",
         "country": "Norway",
@@ -157,7 +159,7 @@ The MCP client in mcp_server/client.py uses the following configuration to route
         "condition": "Partly cloudy",
         "wind_kph": 15.0
       }
-  ```
+```
 ---
 ## 📄 rag_tool.py
  - Reads PDFs from documents/
@@ -165,9 +167,9 @@ The MCP client in mcp_server/client.py uses the following configuration to route
 ---
 ## 🖥️ Running the App
 Start the Streamlit frontend:
-  ```bash
+```bash
   streamlit run main.py
-  ```
+```
 
 - The default LLM model is llama3.2:latest (Ollama)
 - You can ask questions and the app will route them to the appropriate agent via MCP

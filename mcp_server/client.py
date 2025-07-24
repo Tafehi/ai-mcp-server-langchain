@@ -1,5 +1,3 @@
-# client.py
-
 from langchain_mcp_adapters.client import MultiServerMCPClient
 from langgraph.prebuilt import create_react_agent
 from models.ollama_model import OllamaLLM
@@ -9,9 +7,7 @@ import traceback
 
 async def agents(llm_model, llm_provider, question):
     try:
-        print(
-            f"Setting up MCP Client with model: {llm_model} and provider: {llm_provider}"
-        )
+        print(f"Setting up MCP Client with model: {llm_model} and provider: {llm_provider}")
         if llm_provider == "aws":
             model = BedrockLLM(llm_model).get_llm()
         elif llm_provider == "ollama":
@@ -21,11 +17,10 @@ async def agents(llm_model, llm_provider, question):
     except Exception as e:
         raise RuntimeError(f"Failed to initialize LLM: {e}")
 
-    print(
-        f"LLM Model: {model['llm_model']} from {model['llm_provider']} is initialized successfully."
-    )
+    print(f"LLM Model: {model['llm_model']} from {model['llm_provider']} is initialized successfully.")
 
-    client = MultiServerMCPClient(
+    # Define all tools in one MultiServerMCPClient config
+    mcp_client = MultiServerMCPClient(
         {
             "math": {
                 "command": "python",
@@ -41,16 +36,17 @@ async def agents(llm_model, llm_provider, question):
                 "url": "http://localhost:8001/mcp/",
                 "transport": "streamable_http",
             },
-        #     "weather": {
-        #         "url": "http://localhost:8002/mcp/",
-        #         "transport": "streamable_http",
-        #     },
+            "weather": {
+                "url": "http://localhost:8002/mcp/",
+                "transport": "streamable_http",
+            },
         }
     )
+
     print("Connecting to MCP tools and agents")
 
     try:
-        tools = await client.get_tools()
+        tools = await mcp_client.get_tools()
     except* Exception as eg:
         print("ExceptionGroup caught during tool loading:")
         traceback.print_exception(eg)
