@@ -21,6 +21,31 @@ A screenshot of this AI-powered application can be seen below.
 
 
 ---
+## 🔐 Security Through Prompt Engineering
+This application prioritizes data security and responsible AI behavior by embedding strict safety protocols directly into the LLM's behavior using system-level prompt engineering.
+
+# ✅ Why Prompt Engineering for Security?
+Large Language Models (LLMs) are powerful but can inadvertently expose:
+
+- Internal logic or source code
+- Exception traces or debug messages
+- Sensitive credentials or API keys
+- To mitigate this, we enforce a universal system prompt that governs the model’s behavior across all tools and agents.
+
+# 🧠 System Prompt Policy
+Every interaction with the LLM is prefaced with a system message that includes the following rules:
+
+    <p align="center">
+      <img src="./pic/02.png" alt="Fig. 02 - screenshot of LLM Security Improvement using Smart Prompts" width="700" height="700"/>
+    </p>
+
+# 📌 Benefits
+Prevents accidental leakage of sensitive implementation details.
+Ensures compliance with internal security policies.
+Enhances trust and safety in LLM-powered applications.
+---
+
+---
 
 ## 🧱 Project Structure
 ```bash
