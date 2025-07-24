@@ -16,7 +16,7 @@ It demonstrates how to integrate multiple LLMs and tools into a cohesive solutio
 By using [MCP inspector](https://modelcontextprotocol.io/docs/tools/inspector) you track the number of added tools, resources and prompts in MCP server and also `MCP inspector` makes the debugging easy.
 A screenshot of this AI-powered application can be seen below.
     <p align="center">
-      <img src="./pic/01.png" alt="Fig. 01 - screenshot of AI-powered app with MCP server" width="800" height="600"/>
+      <img src="./pic/01.png" alt="Fig. 01 - screenshot of AI-powered app with MCP server" width="700" height="500"/>
     </p>
 
 
