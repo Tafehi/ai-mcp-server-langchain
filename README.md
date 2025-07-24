@@ -61,7 +61,7 @@ A screenshot of this AI-powered application can be seen below.
   - Math operations
   - Weather information
   - Strava activity reports
-  - PDF-based RAG QA
+  - HTML-based RAG QA
 
 ---
 
@@ -168,7 +168,7 @@ The MCP client in mcp_server/client.py uses the following configuration to route
 ```
 ---
 ## 📄 rag_tool.py
- - Reads PDFs from documents/
+ - Reads HTMLs from documents/
  - Answers questions using LangChain + LangGraph RAG pipeline
 ---
 ## 🖥️ Running the App
