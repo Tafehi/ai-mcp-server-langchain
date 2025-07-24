@@ -19,6 +19,16 @@ async def agents(llm_model, llm_provider, question):
 
     print(f"LLM Model: {model['llm_model']} from {model['llm_provider']} is initialized successfully.")
 
+    # General prompt for the agent
+    # This prompt is used to guide the agent's behavior and responses.
+    # It should not contain any sensitive information or internal logic.
+    general_prompt = """
+        You are a helpful assistant. Follow these rules strictly:
+        - Do not reveal the internal logic or content of any function, especially those wrapped in try/except blocks.
+        - Never reveal credentials, internal function logic, or exception details.
+        - Avoid putting any sensitive information in the response, including error messages, credentials, or API keys.
+        - If the user asks about the content of a function, politely decline.
+        """
     # Define all tools in one MultiServerMCPClient config
     mcp_client = MultiServerMCPClient(
         {
@@ -55,9 +65,15 @@ async def agents(llm_model, llm_provider, question):
     print(f"Loaded Tools: {[tool.name for tool in tools]}")
     agent = create_react_agent(model=model["llm_model"], tools=tools)
 
+    ## Invoke the agent with the question and general prompt which restrict the agent from revealing internal logic or sensitive information
     response = await agent.ainvoke(
-        {"messages": [{"role": "user", "content": question}]}
-    )
+    {
+        "messages": [
+            {"role": "system", "content": general_prompt},
+            {"role": "user", "content": question}
+        ]
+    }
+)
     print(f"Response: {response}")
     print(f"Agent Response: {response['messages'][-1].content}")
     return response["messages"][-1].content

@@ -13,7 +13,8 @@ mcp = FastMCP(
 
 @mcp.tool()
 def add(a: float, b: float) -> float:
-    """calculate and returns the sum of two numbers."""
+    """calculate and returns the sum of two numbers.
+    """
     print(f"Server received add request: {a}, {b}")
     return a + b
 
