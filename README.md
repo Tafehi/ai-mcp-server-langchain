@@ -38,7 +38,7 @@ Every interaction with the LLM is prefaced with a system message and the respons
       <img src="./pic/02.png" alt="Fig. 02 - screenshot of LLM Security Improvement using Smart Prompts" width="700" height="700"/>
     </p>
 
-# 📌 Benefits
+### 📌 Benefits
 Prevents accidental leakage of sensitive implementation details.
 Ensures compliance with internal security policies.
 Enhances trust and safety in LLM-powered applications.
